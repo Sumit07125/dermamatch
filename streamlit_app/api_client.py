@@ -8,7 +8,7 @@ from app.engine_loader import load_engine
 # MUST load engine before importing recommender to initialize globals
 load_engine()
 
-from app.recommender import hybrid_search, recommend_by_quiz
+from app.recommender import recommend as backend_recommend
 from app.database import get_product_by_id, list_products as db_list_products
 
 def health_check():
@@ -16,15 +16,15 @@ def health_check():
 
 def recommend(query, top_k=5, candidate_k=50):
     try:
-        results = hybrid_search(query, top_k=top_k, candidate_k=candidate_k)
+        results = backend_recommend(query=query, top_k=top_k, candidate_k=candidate_k)
         return {"status": "success", "recommendations": results}
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
 
 def recommend_quiz(quiz_data):
     try:
-        results = recommend_by_quiz(quiz_data)
-        return {"status": "success", "recommendations": results}
+        results = backend_recommend(**quiz_data)
+        return results # recommend already returns the dict with status, query, etc.
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
 
