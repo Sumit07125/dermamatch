@@ -9,7 +9,6 @@ from app.engine_loader import load_engine
 load_engine()
 
 from app.recommender import recommend as backend_recommend
-from app.database import get_product_by_id, list_products as db_list_products
 
 def health_check():
     return {"status": "healthy", "mode": "direct_import"}
@@ -28,18 +27,47 @@ def recommend_quiz(quiz_data):
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
 
+from app.engine_loader import catalog_by_id
+
 def get_product(product_id):
     try:
-        product = get_product_by_id(product_id)
-        if product:
-            return {"status": "success", "product": product}
-        return {"status": "error", "error": {"message": "Product not found"}}
+        if product_id not in catalog_by_id.index:
+            return {"status": "error", "error": {"message": "Product not found"}}
+            
+        product = catalog_by_id.loc[product_id]
+        
+        product_dict = {
+            "product_id": str(product["product_id"]),
+            "product_name": str(product.get("product_name", "")),
+            "brand_name": str(product.get("brand_name", "")),
+            "category": str(product.get("primary_category", "")),
+            "price_usd": float(product.get("effective_price_usd", 0.0))
+        }
+        return {"status": "success", "product": product_dict}
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
 
 def list_products(limit=20, offset=0, category=None, brand=None):
     try:
-        products = db_list_products(limit=limit, offset=offset, category=category, brand=brand)
+        filtered = catalog_by_id
+        
+        if category:
+            filtered = filtered[filtered["primary_category"].str.lower() == category.lower()]
+        if brand:
+            filtered = filtered[filtered["brand_name"].str.lower() == brand.lower()]
+            
+        page = filtered.iloc[offset:offset+limit]
+        
+        products = []
+        for _, row in page.iterrows():
+            products.append({
+                "product_id": str(row["product_id"]),
+                "product_name": str(row.get("product_name", "")),
+                "brand_name": str(row.get("brand_name", "")),
+                "category": str(row.get("primary_category", "")),
+                "price_usd": float(row.get("effective_price_usd", 0.0))
+            })
+            
         return {"status": "success", "products": products}
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
