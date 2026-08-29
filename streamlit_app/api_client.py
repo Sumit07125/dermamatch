@@ -1,0 +1,41 @@
+import os
+import sys
+
+# Ensure the root directory is in the path so we can import the backend app
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.recommender import hybrid_search, recommend_by_quiz
+from app.database import get_product_by_id, list_products as db_list_products
+
+def health_check():
+    return {"status": "healthy", "mode": "direct_import"}
+
+def recommend(query, top_k=5, candidate_k=50):
+    try:
+        results = hybrid_search(query, top_k=top_k, candidate_k=candidate_k)
+        return {"status": "success", "recommendations": results}
+    except Exception as e:
+        return {"status": "error", "error": {"message": str(e)}}
+
+def recommend_quiz(quiz_data):
+    try:
+        results = recommend_by_quiz(quiz_data)
+        return {"status": "success", "recommendations": results}
+    except Exception as e:
+        return {"status": "error", "error": {"message": str(e)}}
+
+def get_product(product_id):
+    try:
+        product = get_product_by_id(product_id)
+        if product:
+            return {"status": "success", "product": product}
+        return {"status": "error", "error": {"message": "Product not found"}}
+    except Exception as e:
+        return {"status": "error", "error": {"message": str(e)}}
+
+def list_products(limit=20, offset=0, category=None, brand=None):
+    try:
+        products = db_list_products(limit=limit, offset=offset, category=category, brand=brand)
+        return {"status": "success", "products": products}
+    except Exception as e:
+        return {"status": "error", "error": {"message": str(e)}}

@@ -1,0 +1,121 @@
+{
+  "project": "DermaMatch AI",
+  "embedding_model": "BAAI/bge-small-en-v1.5",
+  "embedding_dimension": 384,
+  "chroma_collection": "dermamatch_products",
+  "chroma_path": "D:\\CODE\\ORBO.ai\\data\\artifacts\\chroma",
+  "candidate_k_default": 50,
+  "top_k_default": 5,
+  "ranking_weights": {
+    "semantic": 0.4,
+    "ingredient": 0.25,
+    "review": 0.15,
+    "preference": 0.1,
+    "rating": 0.05,
+    "diversity": 0.05
+  },
+  "ingredient_aliases": {
+    "salicylic acid": [
+      "salicylic acid",
+      "bha",
+      "beta hydroxy acid"
+    ],
+    "niacinamide": [
+      "niacinamide",
+      "nicotinamide"
+    ],
+    "zinc": [
+      "zinc",
+      "zinc oxide",
+      "zinc gluconate",
+      "zinc pca"
+    ],
+    "hyaluronic acid": [
+      "hyaluronic acid",
+      "sodium hyaluronate",
+      "hydrolyzed hyaluronic acid",
+      "hydrolysed hyaluronic acid"
+    ],
+    "vitamin c": [
+      "vitamin c",
+      "ascorbic acid",
+      "l ascorbic acid",
+      "ascorbic"
+    ],
+    "azelaic acid": [
+      "azelaic acid"
+    ],
+    "benzoyl peroxide": [
+      "benzoyl peroxide"
+    ],
+    "retinol": [
+      "retinol"
+    ],
+    "retinal": [
+      "retinal",
+      "retinaldehyde"
+    ],
+    "peptide": [
+      "peptide",
+      "peptides"
+    ],
+    "ceramide": [
+      "ceramide",
+      "ceramides"
+    ],
+    "glycerin": [
+      "glycerin",
+      "glycerine",
+      "glycerol"
+    ],
+    "squalane": [
+      "squalane"
+    ],
+    "fragrance": [
+      "fragrance",
+      "parfum",
+      "perfume"
+    ],
+    "alcohol denat": [
+      "alcohol denat",
+      "denatured alcohol",
+      "sd alcohol",
+      "sd alcohol 40"
+    ]
+  },
+  "concern_ingredient_weights": {
+    "acne": {
+      "salicylic acid": 1.0,
+      "benzoyl peroxide": 1.0,
+      "azelaic acid": 0.9,
+      "niacinamide": 0.65
+    },
+    "oil_control": {
+      "niacinamide": 1.0,
+      "salicylic acid": 0.9,
+      "zinc": 0.7
+    },
+    "hydration": {
+      "hyaluronic acid": 1.0,
+      "glycerin": 0.95,
+      "squalane": 0.8,
+      "ceramide": 0.8
+    },
+    "dark_spots": {
+      "vitamin c": 1.0,
+      "niacinamide": 0.85,
+      "azelaic acid": 0.8
+    },
+    "anti_aging": {
+      "retinol": 1.0,
+      "retinal": 0.95,
+      "peptide": 0.75,
+      "vitamin c": 0.7
+    }
+  },
+  "catalog_rows": 2420,
+  "catalog_columns": 69,
+  "ingredient_profiles_available": 2286,
+  "ingredient_profiles_unavailable": 134,
+  "generated_at_utc": "2026-08-29T09:37:34.942788+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "raw_directory": "D:\\CODE\\ORBO.ai\\data\\raw\\sephora",
+  "review_files": [
+    "reviews_0-250.csv",
+    "reviews_1250-end.csv",
+    "reviews_250-500.csv",
+    "reviews_500-750.csv",
+    "reviews_750-1250.csv"
+  ],
+  "product_rows_raw": 8494,
+  "skincare_rows_final": 2420,
+  "review_rows_total": 1107410,
+  "review_signal_rows": 2351,
+  "recommendation_catalog_rows": 2420,
+  "embedding_model_planned": "BAAI/bge-small-en-v1.5",
+  "vector_database_planned": "ChromaDB",
+  "backend_planned": "Flask",
+  "frontend_planned": "Streamlit"
+}

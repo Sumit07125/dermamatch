@@ -1,0 +1,10 @@
+Flask
+pandas
+numpy
+sentence-transformers
+chromadb
+streamlit
+requests
+pytest
+gunicorn
+python-dotenv

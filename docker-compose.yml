@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - DERMAMATCH_API_HOST=0.0.0.0
+      - DERMAMATCH_API_PORT=5000
+    volumes:
+      - ./data:/app/data
+
+  streamlit:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      - DERMAMATCH_API_URL=http://api:5000
+    command: streamlit run streamlit_app/main.py --server.address=0.0.0.0
+    depends_on:
+      - api
