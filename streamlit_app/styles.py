@@ -5,7 +5,8 @@ from pathlib import Path
 
 def get_random_background_b64():
     """Pick a random background from assets/backgrounds on every reload."""
-    bg_dir = Path("d:/CODE/ORBO.ai/assets/backgrounds")
+    current_dir = Path(__file__).parent
+    bg_dir = (current_dir.parent / "assets" / "backgrounds").resolve()
     if not bg_dir.exists():
         return ""
 

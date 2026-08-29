@@ -17,7 +17,9 @@ def get_product_image_b64(product_id: str) -> str:
     if not product_id:
         product_id = "default"
 
-    img_dir = Path("d:/CODE/ORBO.ai/assets/product_images")
+    current_dir = Path(__file__).parent
+    img_dir = (current_dir.parent / "assets" / "product_images").resolve()
+
     if not img_dir.exists():
         return ""
 
