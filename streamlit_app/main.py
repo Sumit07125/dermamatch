@@ -12,15 +12,99 @@ st.set_page_config(
 
 apply_custom_styles("light")
 
+# ── Sticky top navigation bar ─────────────────────────────────────────────
 st.markdown("""
-<div style="text-align: center; margin-bottom: 2rem; padding: 1rem 0;">
-    <h1 style="font-weight: 800; margin-bottom: 0; font-size: clamp(1.8rem, 5vw, 2.8rem);">DermaMatch AI ✨</h1>
-    <h3 style="color: #7f8c8d; font-weight: 500; margin-top: 5px; font-size: clamp(1rem, 3vw, 1.3rem);">Ingredient-aware skincare recommendations</h3>
-    <p style="color: #9aa5b1; font-size: clamp(12px, 2vw, 14px); max-width: 600px; margin: 0 auto;">
-        Find products that match your skin type, concerns, preferences, budget, and ingredient requirements.
-        Built from product ingredients, review signals, preferences, and semantic similarity.
-    </p>
+<style>
+.dermamatch-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 4px;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(128,128,128,0.15);
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.navbar-portfolio-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #4f46e5;
+    font-weight: 600;
+    font-size: 13.5px;
+    text-decoration: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(79,70,229,0.25);
+    background: rgba(79,70,229,0.06);
+    transition: all 0.2s ease;
+}
+.navbar-portfolio-link:hover {
+    background: rgba(79,70,229,0.14);
+    border-color: #4f46e5;
+    color: #3730a3;
+}
+.navbar-app-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2d3748;
+    letter-spacing: -0.3px;
+}
+.navbar-badge {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    background: linear-gradient(90deg,#4CAF50,#81C784);
+    color: white;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+</style>
+
+<div class="dermamatch-navbar">
+    <div class="navbar-brand">
+        <a class="navbar-portfolio-link" href="https://sumitmali.online" target="_blank" rel="noopener noreferrer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            sumitmali.online
+        </a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+        <span class="navbar-app-name">DermaMatch AI ✨</span>
+        <span class="navbar-badge">LIVE</span>
+    </div>
 </div>
+""", unsafe_allow_html=True)
+
+# ── Hero section ────────────────────────────────────────────────────────────
+st.markdown("""
+<div style="text-align: center; margin-bottom: 2rem; padding: 0.5rem 0 1.2rem;">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(79,70,229,0.08);border:1px solid rgba(79,70,229,0.18);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:#4f46e5;margin-bottom:14px;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#4CAF50;display:inline-block;animation:pulse 2s infinite;"></span>
+        AI-Powered · 2,420 Products · ChromaDB
+    </div>
+    <h1 style="font-weight: 800; margin-bottom: 0; font-size: clamp(1.8rem, 5vw, 2.8rem); background: linear-gradient(135deg, #2d3748 0%, #4f46e5 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">DermaMatch AI ✨</h1>
+    <h3 style="color: #7f8c8d; font-weight: 500; margin-top: 8px; font-size: clamp(1rem, 3vw, 1.2rem);">Ingredient-aware skincare recommendations</h3>
+    <p style="color: #9aa5b1; font-size: clamp(12px, 2vw, 14px); max-width: 600px; margin: 8px auto 0;">
+        Find products that match your skin type, concerns, budget, and ingredient requirements.
+        Powered by semantic search + deep ingredient intelligence.
+    </p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap;">
+        <span style="font-size:12px;padding:4px 12px;border-radius:14px;background:rgba(76,175,80,0.1);color:#2e7d32;font-weight:500;">🧪 Ingredient Matching</span>
+        <span style="font-size:12px;padding:4px 12px;border-radius:14px;background:rgba(79,70,229,0.1);color:#4f46e5;font-weight:500;">🧠 Semantic Search</span>
+        <span style="font-size:12px;padding:4px 12px;border-radius:14px;background:rgba(245,158,11,0.1);color:#b45309;font-weight:500;">💬 Review Signals</span>
+        <span style="font-size:12px;padding:4px 12px;border-radius:14px;background:rgba(239,68,68,0.08);color:#b91c1c;font-weight:500;">⚡ &lt;500ms Results</span>
+    </div>
+</div>
+<style>
+@keyframes pulse {
+    0%,100%{opacity:1} 50%{opacity:0.4}
+}
+</style>
 """, unsafe_allow_html=True)
 
 st.markdown("""
@@ -279,10 +363,20 @@ if result is not None:
 
 st.markdown("""
 <div style="text-align: center; margin-top: 60px; padding: 24px 0 16px; border-top: 1px solid rgba(128,128,128,0.2);">
-    <p style="color:#4f46e5; font-weight:700; font-size:15px; margin-bottom:4px;">DermaMatch AI ✨</p>
-    <p style="color:#9aa5b1; font-size:12px; margin-bottom:4px;">
+    <p style="color:#4f46e5; font-weight:700; font-size:15px; margin-bottom:6px;">DermaMatch AI ✨</p>
+    <p style="color:#9aa5b1; font-size:12px; margin-bottom:8px;">
         Powered by <strong>ChromaDB</strong> · <strong>SentenceTransformers (BGE)</strong> · <strong>Streamlit Cloud</strong>
     </p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:8px;">
+        <a href="https://sumitmali.online" target="_blank" rel="noopener noreferrer"
+           style="color:#4f46e5;font-size:12px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+            🌐 sumitmali.online
+        </a>
+        <a href="https://github.com/Sumit07125/dermamatch" target="_blank" rel="noopener noreferrer"
+           style="color:#6b7280;font-size:12px;font-weight:500;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+            ⭐ GitHub Repo
+        </a>
+    </div>
     <p style="color:#c4c9d1; font-size:11px;">
         Built by <strong>Sumit Mali</strong> · Recommendations are not medical advice
     </p>
