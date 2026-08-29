@@ -177,58 +177,63 @@ if health.get("status") == "error":
 elif health.get("status") == "degraded":
     st.warning("⚠️ The Recommendation Engine is running in degraded mode.")
 
-tab_quiz, tab_nl = st.tabs(["📋 Skincare Quiz", "💬 Natural Language"])
-
 result = None
 query_summary = []
 
-with tab_nl:
-    with st.container():
-        st.html("""
-        <div style="margin-bottom: 20px;">
-            <h3 style="margin-bottom: 5px; color: var(--text-primary); font-weight: 600;">💬 Describe what you want</h3>
-            <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">Type in your own words, and our AI will understand exactly what you need.</p>
-        </div>
-        """)
-        query = st.text_input(
-            "Describe what you're looking for", 
-            placeholder="e.g. lightweight sunscreen for oily acne-prone skin under ₹2500",
-            key="nl_query",
-            label_visibility="collapsed"
-        )
+# ── Skincare Quiz (only mode) ──────────────────────────────────────────
+with st.container():
+    st.html("""
+    <div style="margin-bottom: 20px;">
+        <h3 style="margin-bottom: 5px; color: var(--text-primary); font-weight: 600;">📋 Tell us what your skin needs</h3>
+        <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">Select your exact criteria to get a perfectly tailored skincare match.</p>
+    </div>
+    """)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        skin_type = st.selectbox("Skin type", ["", "oily", "dry", "combination", "normal", "sensitive"])
+        category = st.selectbox("Category", ["", "all", "cleanser", "moisturizer", "sunscreen", "serum", "mask", "treatment", "eye care"])
+        budget_inr = st.number_input("Maximum Budget (₹)", min_value=0.0, step=500.0, value=2000.0)
+        budget = budget_inr / 83.0 if budget_inr > 0 else 0.0
+    
+    with col2:
+        concerns = st.multiselect("Concerns", ["acne", "hydration", "dark spots", "anti-aging", "oil control"])
+        preferred_terms = st.multiselect("Preferred characteristics", ["lightweight", "fragrance-free", "non-greasy", "non-comedogenic"])
+        avoid_ingredients = st.text_input("Avoid ingredients (comma separated)")
         
-        # Options row
-        c1, c2 = st.columns([1, 4])
-        with c1:
-            top_k_nl = st.selectbox("Results", [3, 5], index=0, key="nl_top_k")
+    c1, c2 = st.columns([1, 4])
+    with c1:
+        top_k_quiz = st.selectbox("Results", [3, 5], index=0, key="quiz_top_k")
         
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("✨ Find My Best Matches", key="nl_submit", use_container_width=True):
-            if not query.strip():
-                st.warning("Please enter a query.")
-            else:
-                query_summary = [f"Query: {query}"]
-                with st.spinner("Analyzing your preferences... Finding relevant products..."):
-                    result = recommend(query, top_k=top_k_nl)
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("✨ Find My Best Matches", key="quiz_submit", use_container_width=True):
+        quiz_data = {}
+        if skin_type: 
+            quiz_data["skin_type"] = skin_type
+            query_summary.append(skin_type.title() + " Skin")
+        if category and category != "all": 
+            quiz_data["category"] = category
+            query_summary.append(category.title())
+        if budget > 0: 
+            quiz_data["budget_max"] = budget
+            query_summary.append(f"≤ ₹{budget_inr:,.0f}")
+        if concerns: 
+            quiz_data["concerns"] = concerns
+            query_summary.extend([c.title() for c in concerns])
+        if preferred_terms: 
+            quiz_data["preferred_terms"] = preferred_terms
+            query_summary.extend([p.title() for p in preferred_terms])
+        if avoid_ingredients.strip():
+            quiz_data["avoid_ingredients"] = [x.strip() for x in avoid_ingredients.split(",")]
+        
+        quiz_data["top_k"] = top_k_quiz
+        
+        if not quiz_data or list(quiz_data.keys()) == ["top_k"]:
+            st.warning("Please fill out at least some preferences.")
+        else:
+            with st.spinner("Analyzing your preferences... Finding relevant products..."):
+                result = recommend_quiz(quiz_data)
 
-with tab_quiz:
-    with st.container():
-        st.html("""
-        <div style="margin-bottom: 20px;">
-            <h3 style="margin-bottom: 5px; color: var(--text-primary); font-weight: 600;">📋 Tell us what your skin needs</h3>
-            <p style="color: var(--text-secondary); font-size: 14px; margin: 0;">Select your exact criteria to get a perfectly tailored skincare match.</p>
-        </div>
-        """)
-        
-        col1, col2 = st.columns(2)
-        with col1:
-            skin_type = st.selectbox("Skin type", ["", "oily", "dry", "combination", "normal", "sensitive"])
-            category = st.selectbox("Category", ["", "all", "cleanser", "moisturizer", "sunscreen", "serum", "mask", "treatment", "eye care"])
-            budget_inr = st.number_input("Maximum Budget (₹)", min_value=0.0, step=500.0, value=2000.0)
-            budget = budget_inr / 83.0 if budget_inr > 0 else 0.0
-        
-        with col2:
-            concerns = st.multiselect("Concerns", ["acne", "hydration", "dark spots", "anti-aging", "oil control"])
             preferred_terms = st.multiselect("Preferred characteristics", ["lightweight", "fragrance-free", "non-greasy", "non-comedogenic"])
             avoid_ingredients = st.text_input("Avoid ingredients (comma separated)")
             
