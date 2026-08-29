@@ -170,10 +170,55 @@ if result is not None:
         """, unsafe_allow_html=True)
     else:
         recs = result.get("recommendations", [])
-        
+        latency = result.get("latency_ms", {})
+        total_ms = latency.get("total", 0)
+        retrieval_ms = latency.get("retrieval", 0)
+
         st.markdown("### Your recommendations")
+
+        # ── AI Diagnostics Banner ──────────────────────────────────────────────
+        top_rec = recs[0] if recs else {}
+        top_scores = top_rec.get("score_breakdown", {})
+        semantic_pct = int(float(top_scores.get("semantic_similarity", 0)) * 100)
+        ingredient_pct = int(float(top_scores.get("ingredient_match", 0)) * 100)
+        review_pct = int(float(top_scores.get("review_relevance", 0)) * 100)
+
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(135deg, rgba(79,70,229,0.07), rgba(16,185,129,0.07));
+            border: 1px solid rgba(79,70,229,0.18);
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            font-size: 12.5px;
+        ">
+            <span style="font-weight: 700; color: #4f46e5; margin-right: 4px;">⚡ AI Engine</span>
+            <span style="background:rgba(79,70,229,0.12);color:#4f46e5;padding:3px 10px;border-radius:20px;font-weight:600;">
+                🕒 {total_ms:.0f} ms total
+            </span>
+            <span style="background:rgba(16,185,129,0.12);color:#059669;padding:3px 10px;border-radius:20px;font-weight:600;">
+                🔍 {retrieval_ms:.0f} ms retrieval
+            </span>
+            <span style="background:rgba(245,158,11,0.12);color:#d97706;padding:3px 10px;border-radius:20px;font-weight:600;">
+                🧠 {semantic_pct}% semantic
+            </span>
+            <span style="background:rgba(239,68,68,0.10);color:#dc2626;padding:3px 10px;border-radius:20px;font-weight:600;">
+                🧪 {ingredient_pct}% ingredient
+            </span>
+            <span style="background:rgba(99,102,241,0.10);color:#6366f1;padding:3px 10px;border-radius:20px;font-weight:600;">
+                💬 {review_pct}% reviews
+            </span>
+            <span style="margin-left:auto;color:#9ca3af;font-size:11px;">{len(recs)} results · ChromaDB + BGE</span>
+        </div>
+        """, unsafe_allow_html=True)
+        # ─────────────────────────────────────────────────────────────────────
+
         st.markdown(f"**{len(recs)} matches found**")
-        
+
         if query_summary:
             summary_html = " ".join([f'<span class="badge">{s}</span>' for s in query_summary])
             st.markdown(f"<div style='margin-bottom: 12px;'>{summary_html}</div>", unsafe_allow_html=True)
@@ -199,8 +244,13 @@ if result is not None:
                         display_recommendation_card(recs[i+j], i+j+1)
 
 st.markdown("""
-<div style="text-align: center; margin-top: 60px; padding-top: 20px; border-top: 1px solid rgba(128,128,128,0.2); color: #9aa5b1; font-size: 12px;">
-    <p style="margin-bottom: 4px;"><strong>DermaMatch AI</strong> — Ingredient-aware skincare recommendation prototype</p>
-    <p>Recommendations are based on catalog data and review-derived signals. They are not medical advice.</p>
+<div style="text-align: center; margin-top: 60px; padding: 24px 0 16px; border-top: 1px solid rgba(128,128,128,0.2);">
+    <p style="color:#4f46e5; font-weight:700; font-size:15px; margin-bottom:4px;">DermaMatch AI ✨</p>
+    <p style="color:#9aa5b1; font-size:12px; margin-bottom:4px;">
+        Powered by <strong>ChromaDB</strong> · <strong>SentenceTransformers (BGE)</strong> · <strong>Streamlit Cloud</strong>
+    </p>
+    <p style="color:#c4c9d1; font-size:11px;">
+        Built by <strong>Sumit Mali</strong> · Recommendations are not medical advice
+    </p>
 </div>
 """, unsafe_allow_html=True)
