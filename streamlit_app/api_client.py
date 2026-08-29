@@ -4,6 +4,10 @@ import sys
 # Ensure the root directory is in the path so we can import the backend app
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from app.engine_loader import load_engine
+# MUST load engine before importing recommender to initialize globals
+load_engine()
+
 from app.recommender import hybrid_search, recommend_by_quiz
 from app.database import get_product_by_id, list_products as db_list_products
 
