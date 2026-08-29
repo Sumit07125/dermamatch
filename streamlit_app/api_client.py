@@ -15,8 +15,8 @@ def health_check():
 
 def recommend(query, top_k=5, candidate_k=50):
     try:
-        results = backend_recommend(query=query, top_k=top_k, candidate_k=candidate_k)
-        return {"status": "success", "recommendations": results}
+        # Pass through backend result directly — it already has {status, recommendations, latency_ms}
+        return backend_recommend(query=query, top_k=top_k, candidate_k=candidate_k)
     except Exception as e:
         return {"status": "error", "error": {"message": str(e)}}
 
