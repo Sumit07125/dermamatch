@@ -28,25 +28,55 @@ st.markdown("""
 /* ── Responsive overrides ── */
 @media (max-width: 768px) {
     .block-container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
         border-radius: 0 !important;
         margin-top: 0 !important;
     }
     .product-card { padding: 14px !important; }
     .product-title { font-size: 15px !important; }
     .product-price { font-size: 18px !important; }
-    .product-image-container { height: 140px !important; }
+
+    /* KEY FIX: ensure image is fully visible on mobile */
+    .product-image-container {
+        height: 160px !important;
+        min-height: 160px !important;
+        width: 100% !important;
+        background-size: cover !important;
+        background-position: center center !important;
+        background-repeat: no-repeat !important;
+        border-radius: 8px !important;
+        display: block !important;
+    }
 }
+
 @media (max-width: 480px) {
-    .product-image-container { height: 110px !important; }
+    .product-image-container {
+        height: 140px !important;
+        min-height: 140px !important;
+        background-size: cover !important;
+        background-position: center center !important;
+    }
     h1 { font-size: 1.6rem !important; }
+    .price-score-row { flex-wrap: wrap; gap: 6px; }
 }
+
 /* Remove Streamlit default sidebar hamburger clutter */
 [data-testid="stSidebarCollapsedControl"] { display: none !important; }
 /* Full width tabs on mobile */
 .stTabs [data-baseweb="tab-list"] { flex-wrap: wrap; gap: 4px; }
 .stTabs [data-baseweb="tab"] { flex: 1; text-align: center; min-width: 120px; }
+
+/* Ensure Streamlit columns stack properly on mobile */
+@media (max-width: 640px) {
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+    }
+    [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        min-width: 100% !important;
+        flex: 1 1 100% !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -234,11 +264,15 @@ if result is not None:
         elif sort_by == "Ingredient Match":
             recs = sorted(recs, key=lambda x: float(x.get('ingredient_coverage') or 0), reverse=True)
             
-        # Responsive card layout: 3 cols on desktop, fewer if fewer results
+        # Responsive card layout: 1 col on mobile (<= 1 result on tiny screen), else up to 3
+        # Use a single-column layout which Streamlit renders better on mobile.
+        # On desktop, st.columns(3) produces a 3-up grid correctly.
         num_cols = min(3, len(recs)) if recs else 1
         for i in range(0, len(recs), num_cols):
-            cols = st.columns(num_cols)
-            for j in range(num_cols):
+            # For a single result always use 1 col for clean centering
+            actual_cols = min(num_cols, len(recs) - i)
+            cols = st.columns(actual_cols)
+            for j in range(actual_cols):
                 if i + j < len(recs):
                     with cols[j]:
                         display_recommendation_card(recs[i+j], i+j+1)

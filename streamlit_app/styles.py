@@ -145,7 +145,11 @@ def apply_custom_styles(theme="light"):
         .product-image-container {
             width: 100%;
             height: 200px;
+            min-height: 180px;
             background: var(--img-bg);
+            background-size: cover !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
             border-radius: 10px;
             display: flex;
             align-items: center;

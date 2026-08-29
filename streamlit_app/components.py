@@ -109,7 +109,7 @@ def display_recommendation_card(rec: dict, rank: int):
     img_b64 = get_product_image_b64(product_id)
     
     if img_b64:
-        img_html = f"""<div class="product-image-container" style="background-image: url('{img_b64}'); background-size: cover; background-position: center; border-radius: 8px;"></div>"""
+        img_html = f"""<div class="product-image-container" style="background-image: url('{img_b64}'); background-size: cover !important; background-position: center center !important; background-repeat: no-repeat !important; width: 100%; height: 200px; min-height: 180px; border-radius: 8px; display: block;"></div>"""
     else:
         img_html = f"""<div class="product-image-container">✦</div>"""
     
