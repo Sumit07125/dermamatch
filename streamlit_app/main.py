@@ -20,15 +20,15 @@ st.markdown("""
     align-items: center;
     justify-content: space-between;
     padding: 10px 4px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     border-bottom: 1px solid rgba(128,128,128,0.15);
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
 }
 .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 .navbar-portfolio-link {
@@ -49,6 +49,18 @@ st.markdown("""
     background: rgba(79,70,229,0.14);
     border-color: #4f46e5;
     color: #3730a3;
+}
+.navbar-details-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #059669;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(16,185,129,0.25);
+    background: rgba(16,185,129,0.08);
 }
 .navbar-app-name {
     font-size: 15px;
@@ -72,6 +84,9 @@ st.markdown("""
         <a class="navbar-portfolio-link" href="https://sumitmali.online" target="_blank" rel="noopener noreferrer">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             sumitmali.online
+        </a>
+        <a class="navbar-portfolio-link" href="#project-details" style="color: #059669; border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.06);">
+            📖 View Project Details
         </a>
     </div>
     <div style="display:flex;align-items:center;gap:10px;">
@@ -108,13 +123,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── HR & Evaluator Technical Documentation Modal / Expander ──────────────────
-with st.expander("📖 View Project Details & Technical Report (HR & Evaluator Guide)", expanded=False):
+# ── Project Details Anchor & Expander ─────────────────────────────────────────
+st.markdown("<div id='project-details'></div>", unsafe_allow_html=True)
+with st.expander("📖 View Project Details & Technical Specifications", expanded=False):
     st.markdown("""
     <div style="background: rgba(79,70,229,0.03); border-radius: 12px; padding: 16px 20px; border: 1px solid rgba(79,70,229,0.15); margin-bottom: 20px;">
-        <h4 style="color: #4f46e5; margin: 0 0 6px 0; font-size: 16px;">📑 Technical Assignment — Executive Summary</h4>
+        <h4 style="color: #4f46e5; margin: 0 0 6px 0; font-size: 16px;">📑 Technical Specifications & Architecture Overview</h4>
         <p style="font-size: 13px; color: #4a5568; margin: 0;">
-            This technical documentation provides a complete breakdown of <strong>DermaMatch AI</strong> addressing every requirement specified in the Technical Assignment rubric: problem formulation, architecture, 6D scoring algorithm, evaluation metrics, test cases, and industry comparison.
+            Complete technical breakdown of <strong>DermaMatch AI</strong>: problem formulation, system architecture, 6D scoring algorithm, evaluation metrics, test cases, and industry comparison.
         </p>
     </div>
     """, unsafe_allow_html=True)
